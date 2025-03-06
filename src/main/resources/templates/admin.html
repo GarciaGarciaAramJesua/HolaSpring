@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Gestión de Usuarios</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="usuarios">
+                <!-- Usuarios se cargarán aquí -->
+            </tbody>
+        </table>
+        <a href="/logout" class="btn btn-primary">Cerrar sesión</a>
+    </div>
+
+    <!-- Modal para editar usuario -->
+    <div class="modal fade" id="editarUsuarioModal" tabindex="-1" aria-labelledby="editarUsuarioModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarUsuarioModalLabel">Editar Usuario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editarUsuarioForm">
+                        <input type="hidden" id="editarUsuarioId">
+                        <div class="form-group">
+                            <label for="editarNombre">Nombre</label>
+                            <input type="text" class="form-control" id="editarNombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editarEmail">Email</label>
+                            <input type="email" class="form-control" id="editarEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editarPassword">Contraseña</label>
+                            <input type="password" class="form-control" id="editarPassword">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch("/usuarios")
+                .then(response => response.json())
+                .then(data => {
+                    const usuarios = document.getElementById("user");
+                    data.forEach(usuario => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${usuario.id}</td>
+                            <td>${usuario.nombre}</td>
+                            <td>${usuario.email}</td>
+                            <td>
+                                <button class="btn btn-warning" onclick="editarUsuario(${usuario.id})">Editar</button>
+                                <button class="btn btn-danger" onclick="eliminarUsuario(${usuario.id})">Eliminar</button>
+                            </td>
+                        `;
+                        usuarios.appendChild(row);
+                    });
+                });
+        });
+
+        function editarUsuario(id) {
+            fetch(`/usuarios/${id}`)
+                .then(response => response.json())
+                .then(usuario => {
+                    document.getElementById("editarUsuarioId").value = usuario.id;
+                    document.getElementById("editarNombre").value = usuario.nombre;
+                    document.getElementById("editarEmail").value = usuario.email;
+                    document.getElementById("editarPassword").value = ""; // Dejar vacío para no mostrar la contraseña actual
+                    new bootstrap.Modal(document.getElementById("editarUsuarioModal")).show();
+                });
+        }
+
+        document.getElementById("editarUsuarioForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const id = document.getElementById("editarUsuarioId").value;
+            const nombre = document.getElementById("editarNombre").value;
+            const email = document.getElementById("editarEmail").value;
+            const password = document.getElementById("editarPassword").value;
+
+            const usuario = { nombre: nombre, email: email };
+            if (password) {
+                usuario.password = password;
+            }
+
+            fetch(`/usuarios/${id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(usuario)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert("Usuario actualizado con éxito");
+                location.reload();
+            })
+            .catch(error => console.error("Error:", error));
+        });
+
+        function eliminarUsuario(id) {
+            fetch(`/usuarios/${id}`, {
+                method: "DELETE"
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                location.reload();
+            });
+        }
+    </script>
+
+    <!-- Incluir Bootstrap JS y dependencias -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

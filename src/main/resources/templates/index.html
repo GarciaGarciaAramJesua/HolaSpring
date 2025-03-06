@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hola Spring </title>
+    <!-- Incluir Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Incluir MDB CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
     <section class="vh-100" style="background-color: #9A616D;">
@@ -19,7 +24,7 @@
                   <div class="col-md-6 col-lg-7 d-flex align-items-center">
                     <div class="card-body p-4 p-lg-5 text-black">
       
-                      <form>
+                      <form id="loginForm" method="post" action="/login">
       
                         <div class="d-flex align-items-center mb-3 pb-1">
                           <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
@@ -29,12 +34,12 @@
                         <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Sign into your account</h5>
       
                         <div data-mdb-input-init class="form-outline mb-4">
-                            <input type="email" id="email" class="form-control form-control-lg" required />
+                            <input type="email" id="email" name="email" class="form-control form-control-lg" required />
                             <label class="form-label" for="email">Email address</label>
                         </div>
       
                         <div data-mdb-input-init class="form-outline mb-4">
-                            <input type="password" id="password" class="form-control form-control-lg" required />
+                            <input type="password" id="password" name="password" class="form-control form-control-lg" required />
                             <label class="form-label" for="password">Password</label>
                         </div>
       
@@ -43,29 +48,11 @@
                         </div>
       
                         <a class="small text-muted" href="#!">Forgot password?</a>
-                        <p class="mb-5 pb-lg-2" style="color: #393f81;">Don't have an account? <a href="#!"
+                        <p class="mb-5 pb-lg-2" style="color: #393f81;">Don't have an account? <a href="/usuarios/registro"
                             style="color: #393f81;">Register here</a></p>
                         <a href="#!" class="small text-muted">Terms of use.</a>
                         <a href="#!" class="small text-muted">Privacy policy</a>
                       </form>
-                      
-                      <script>
-                        document.getElementById("registroForm").addEventListener("submit", function(event) {
-                            event.preventDefault();
-                        
-                            const email = document.getElementById("email").value;
-                            const password = document.getElementById("password").value;
-                        
-                            fetch("http://localhost:8080/api/usuarios/registro", {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({ email: email, password: password })
-                            })
-                            .then(response => response.text())
-                            .then(data => alert(data))
-                            .catch(error => console.error("Error:", error));
-                        });
-                    </script>
 
                     </div>
                   </div>
@@ -75,5 +62,12 @@
           </div>
         </div>
       </section>
+
+      <!-- Incluir Bootstrap JS y dependencias -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Incluir MDB JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js"></script>
 </body>
 </html>

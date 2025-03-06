@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Usuario</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Perfil de Usuario</h1>
+        <div>
+            <p><strong>Nombre:</strong> <span id="nombre"></span></p>
+            <p><strong>Email:</strong> <span id="email"></span></p>
+        </div>
+        <a href="/logout" class="btn btn-primary">Cerrar sesión</a>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch("/usuarios/perfil")
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("nombre").textContent = data.nombre;
+                    document.getElementById("email").textContent = data.email;
+                });
+        });
+    </script>
+</body>
+</html>
