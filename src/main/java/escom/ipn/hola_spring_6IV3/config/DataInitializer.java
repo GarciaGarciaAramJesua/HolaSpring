@@ -20,10 +20,10 @@ public class DataInitializer {
             roleRepository.save(role);
 
             User user = User.builder()
-                    .username("sudo")
-                    .lastname("user")
-                    .firstname("super")
-                    .country("not defined")
+                    .username("admin")
+                    .lastname("istrador")
+                    .firstname("admin")
+                    .country("Papua Nueva Guinea")
                     .password(new BCryptPasswordEncoder().encode("password"))
                     .role(role)
                     .build();

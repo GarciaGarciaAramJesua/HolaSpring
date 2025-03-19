@@ -1,0 +1,254 @@
+:root {
+    --primary-color: #6A1B9A;
+    --secondary-color: #AB47BC;
+    --background-color: #F3E5F5;
+    --text-color: #4A148C;
+    --accent-color: #7E57C2;
+    --white: #ffffff;
+    --error-color: #D32F2F;
+    --error-dark: #B71C1C;
+    --light-gray: #EDE7F6;
+    --success-color: #388E3C;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    margin: 20px;
+    padding: 20px;
+}
+
+.container {
+    background-color: var(--white);
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 1200px;
+    padding: 30px;
+    position: relative;
+    overflow: hidden;
+}
+
+h1, h2 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 700;
+    font-size: 28px;
+}
+
+h1 {
+    background-color: var(--accent-color);
+    color: var(--white);
+    padding: 20px 0;
+    margin: 0;
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--white);
+}
+
+thead {
+    background-color: var(--secondary-color);
+    color: var(--white);
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--accent-color);
+}
+
+th {
+    text-transform: uppercase;
+    font-size: 0.9em;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+tr:nth-child(even) {
+    background-color: rgba(171, 71, 188, 0.05);
+}
+
+tr:hover {
+    background-color: rgba(171, 71, 188, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.action-buttons button {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.action-buttons button:hover {
+    background-color: var(--secondary-color);
+    transform: scale(1.05);
+}
+
+.action-buttons button:last-child {
+    background-color: var(--error-color);
+}
+
+.action-buttons button:last-child:hover {
+    background-color: var(--error-dark);
+}
+
+input, select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--accent-color);
+    border-radius: 8px;
+    font-size: 1em;
+}
+
+.password-container {
+    display: flex;
+    align-items: center;
+}
+
+.password-container input {
+    flex: 1;
+}
+
+.password-container i {
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: var(--white);
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 15px;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--accent-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.modal-title {
+    color: var(--primary-color);
+    font-size: 1.5em;
+    margin: 0;
+}
+
+.close-button {
+    font-size: 1.5em;
+    cursor: pointer;
+    color: var(--text-color);
+    border: none;
+    background: none;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.form-buttons button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.cancel-button {
+    background-color: var(--error-color);
+    color: var(--white);
+}
+
+.submit-button {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+
+.add-user-button {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    margin: 20px 0;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.add-user-button:hover {
+    background-color: var(--secondary-color);
+    transform: scale(1.05);
+}
+
+@media screen and (max-width: 600px) {
+    table {
+        font-size: 0.9em;
+    }
+
+    th, td {
+        padding: 8px 10px;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 5% auto;
+    }
+}
