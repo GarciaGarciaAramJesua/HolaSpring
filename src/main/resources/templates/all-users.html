@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Todos los Usuarios</title>
+    <style>
+      :root {
+        --primary-color: #406767;
+        --secondary-color: #5c8984;
+        --background-color: #f5f5f5;
+        --text-color: #2c3e50;
+        --accent-color: #a5c9ca;
+        --white: #ffffff;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: var(--background-color);
+        color: var(--text-color);
+        line-height: 1.6;
+        margin: 20px;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background-color: var(--white);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      h1 {
+        color: var(--primary-color);
+        text-align: center;
+        padding: 20px 0;
+        margin: 0;
+        background-color: var(--accent-color);
+        font-weight: 300;
+        letter-spacing: 1px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: var(--white);
+      }
+
+      /* Estilos corregidos */
+      thead {
+        background-color: var(--secondary-color); /* #5c8984 */
+        color: var(--white);
+      }
+
+      /* Opcional: Añadir bordes sutiles para mayor definición */
+      th {
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      th,
+      td {
+        padding: 8px 15px;
+        text-align: left;
+        border-bottom: 1px solid var(--accent-color);
+      }
+
+      th {
+        text-transform: uppercase;
+        font-size: 0.9em;
+        letter-spacing: 0.5px;
+        font-weight: 600; /* Aumentado de 500 a 600 para mayor legibilidad */
+        background-color: var(
+          --secondary-color
+        ); /* Usar el mismo color que thead */
+        color: var(--white); /* Asegurar que el texto sea blanco */
+      }
+
+      tr:nth-child(even) {
+        background-color: rgba(92, 137, 132, 0.05);
+      }
+
+      tr:hover {
+        background-color: rgba(92, 137, 132, 0.1);
+        transition: background-color 0.3s ease;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+      }
+
+      .action-buttons button {
+        background-color: var(--primary-color);
+        color: var(--white);
+        border: none;
+        padding: 8px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9em;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      }
+
+      .action-buttons button:hover {
+        background-color: var(--secondary-color);
+        transform: scale(1.05);
+      }
+
+      .action-buttons button:last-child {
+        background-color: #e74c3c;
+      }
+
+      .action-buttons button:last-child:hover {
+        background-color: #c0392b;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid var(--accent-color);
+        border-radius: 4px;
+        font-size: 1em;
+      }
+
+      .password-container {
+        display: flex;
+        align-items: center;
+      }
+
+      .password-container input {
+        flex: 1;
+      }
+
+      .password-container i {
+        cursor: pointer;
+        margin-left: 5px;
+      }
+
+      /* Estilos para el modal */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .modal-content {
+        background-color: var(--white);
+        margin: 10% auto;
+        padding: 20px;
+        border-radius: 8px;
+        width: 80%;
+        max-width: 500px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--accent-color);
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+      }
+
+      .modal-title {
+        color: var(--primary-color);
+        font-size: 1.5em;
+        margin: 0;
+      }
+
+      .close-button {
+        font-size: 1.5em;
+        cursor: pointer;
+        color: var(--text-color);
+        border: none;
+        background: none;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      .form-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .form-buttons button {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1em;
+      }
+
+      .cancel-button {
+        background-color: #e74c3c;
+        color: var(--white);
+      }
+
+      .submit-button {
+        background-color: var(--primary-color);
+        color: var(--white);
+      }
+
+      /* Botón para añadir nuevo usuario */
+      .add-user-button {
+        background-color: var(--primary-color);
+        color: var(--white);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-size: 1em;
+        cursor: pointer;
+        margin: 20px 0;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      }
+
+      .add-user-button:hover {
+        background-color: var(--secondary-color);
+        transform: scale(1.05);
+      }
+
+      @media screen and (max-width: 600px) {
+        table {
+          font-size: 0.9em;
+        }
+
+        th,
+        td {
+          padding: 8px 10px;
+        }
+
+        .modal-content {
+          width: 95%;
+          margin: 5% auto;
+        }
+      }
+    </style>
+    <script
+      src="https://kit.fontawesome.com/a076d05399.js"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          window.location.href = "/login";
+          return;
+        }
+
+        fetch(`/api/admin/all-info`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((response) => {
+            if (!response.ok) throw new Error("No autorizado");
+            return response.json();
+          })
+          .then((data) => {
+            const usersTable = document.getElementById("users-table");
+            data.forEach((user) => {
+              const row = usersTable.insertRow();
+              row.insertCell(0).textContent = user.username;
+              row.insertCell(1).textContent = user.firstname;
+              row.insertCell(2).textContent = user.lastname;
+              row.insertCell(3).textContent = user.country;
+              row.insertCell(4).textContent = user.role;
+              const passwordCell = row.insertCell(5);
+              passwordCell.innerHTML = `
+                        <div class="password-container">
+                            <span>********</span>
+                            <i class="fas fa-eye" onclick="togglePasswordVisibility(this)"></i>
+                        </div>
+                    `;
+              const actionCell = row.insertCell(6);
+              actionCell.innerHTML = `
+                        <div class="action-buttons">
+                            <button onclick="editUser(this)">Editar</button>
+                            <button onclick="deleteUser('${user.username}')">Eliminar</button>
+                        </div>
+                    `;
+            });
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            window.location.href = "/view/my-profile";
+          });
+      });
+
+      function togglePasswordVisibility(icon) {
+        const passwordContainer = icon.closest(".password-container");
+        const passwordSpan = passwordContainer.querySelector("span");
+        if (passwordSpan.textContent === "********") {
+          // Fetch the actual password from the server (this is just a placeholder)
+          passwordSpan.textContent = "actual_password"; // Replace with actual password fetching logic
+          icon.classList.remove("fa-eye");
+          icon.classList.add("fa-eye-slash");
+        } else {
+          passwordSpan.textContent = "********";
+          icon.classList.remove("fa-eye-slash");
+          icon.classList.add("fa-eye");
+        }
+      }
+
+      function editUser(button) {
+        const row = button.closest("tr");
+        const cells = row.querySelectorAll("td:not(:last-child)");
+
+        // Guardar el nombre de usuario original antes de modificar las celdas
+        const originalUsername = cells[0].textContent;
+
+        cells.forEach((cell, index) => {
+          if (index === 4) {
+            // Role column
+            const select = document.createElement("select");
+            const roles = ["USER", "ADMIN"];
+            roles.forEach((role) => {
+              const option = document.createElement("option");
+              option.value = role;
+              option.textContent = role;
+              if (cell.textContent === role) {
+                option.selected = true;
+              }
+              select.appendChild(option);
+            });
+            cell.dataset.originalValue = cell.textContent; // Store original value
+            cell.textContent = "";
+            cell.appendChild(select);
+          } else if (index === 5) {
+            // Password column
+            const input = document.createElement("input");
+            input.type = "password";
+            input.placeholder = "Nueva contraseña";
+            cell.dataset.originalValue = cell.querySelector("span").textContent; // Store original value
+            cell.innerHTML = "";
+            const passwordContainer = document.createElement("div");
+            passwordContainer.className = "password-container";
+            passwordContainer.appendChild(input);
+            const eyeIcon = document.createElement("i");
+            eyeIcon.className = "fas fa-eye";
+            eyeIcon.onclick = () => togglePasswordVisibility(eyeIcon);
+            passwordContainer.appendChild(eyeIcon);
+            cell.appendChild(passwordContainer);
+          } else {
+            const input = document.createElement("input");
+            input.type = "text";
+            input.value = cell.textContent;
+            cell.dataset.originalValue = cell.textContent; // Store original value
+            cell.textContent = "";
+            cell.appendChild(input);
+          }
+        });
+
+        const actionButtons = row.querySelector(".action-buttons");
+        actionButtons.innerHTML = `
+                <button onclick="saveUser(this, '${originalUsername}')">Guardar</button>
+                <button onclick="cancelEdit(this)">Cancelar</button>
+            `;
+      }
+
+      function saveUser(button, originalUsername) {
+        const row = button.closest("tr");
+        const cells = row.querySelectorAll("td:not(:last-child)");
+        const token = localStorage.getItem("token");
+
+        const updatedUserDto = {
+          username: cells[0].querySelector("input").value,
+          firstname: cells[1].querySelector("input").value,
+          lastname: cells[2].querySelector("input").value,
+          country: cells[3].querySelector("input").value,
+          role: cells[4].querySelector("select").value, // Solo envía el nombre del rol
+          password: cells[5].querySelector("input").value || null,
+        };
+
+        fetch(`/api/admin/update/${originalUsername}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(updatedUserDto),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Error en la actualización");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            cells.forEach((cell, index) => {
+              if (index === 4) {
+                // Role column
+                const select = cell.querySelector("select");
+                cell.textContent = select.value;
+              } else if (index === 5) {
+                // Password column
+                cell.innerHTML = `
+                            <div class="password-container">
+                                <span>********</span>
+                                <i class="fas fa-eye" onclick="togglePasswordVisibility(this)"></i>
+                            </div>
+                        `;
+              } else {
+                const input = cell.querySelector("input");
+                cell.textContent = input.value;
+              }
+            });
+            const actionButtons = row.querySelector(".action-buttons");
+            actionButtons.innerHTML = `
+                    <button onclick="editUser(this)">Editar</button>
+                    <button onclick="deleteUser('${updatedUserDto.username}')">Eliminar</button>
+                `;
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("No se pudo actualizar el usuario. Verifique los datos.");
+          });
+      }
+
+      function cancelEdit(button) {
+        const row = button.closest("tr");
+        const cells = row.querySelectorAll("td:not(:last-child)");
+        cells.forEach((cell) => {
+          cell.textContent = cell.dataset.originalValue; // Restore original value
+        });
+
+        const actionButtons = row.querySelector(".action-buttons");
+        actionButtons.innerHTML = `
+                <button onclick="editUser(this)">Editar</button>
+                <button onclick="deleteUser('${cells[0].textContent}')">Eliminar</button>
+            `;
+      }
+
+      function deleteUser(username) {
+        const token = localStorage.getItem("token");
+        fetch(`/api/admin/delete/${username}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((response) => {
+            if (!response.ok) throw new Error("No autorizado");
+            location.reload();
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+
+      // Función para mostrar el modal de añadir usuario
+      function showAddUserModal() {
+        document.getElementById("addUserModal").style.display = "block";
+      }
+
+      // Función para cerrar el modal
+      function closeAddUserModal() {
+        document.getElementById("addUserModal").style.display = "none";
+        // Limpiar el formulario
+        document.getElementById("addUserForm").reset();
+      }
+
+      // Función para registrar un nuevo usuario
+      function registerUser(event) {
+        event.preventDefault();
+
+        const username = document.getElementById("newUsername").value;
+        const password = document.getElementById("newPassword").value;
+        const firstName = document.getElementById("newFirstName").value;
+        const lastName = document.getElementById("newLastName").value;
+        const country = document.getElementById("newCountry").value;
+        const role = document.getElementById("newRole").value;
+
+        const registerRequest = {
+          username: username,
+          password: password,
+          firstName: firstName,
+          lastName: lastName,
+          country: country,
+          role: role,
+        };
+
+        fetch(`/auth/register`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify(registerRequest),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              return response.text().then((text) => {
+                throw new Error(text || "Error al registrar usuario");
+              });
+            }
+            return response;
+          })
+          .then(() => {
+            alert("Usuario registrado exitosamente");
+            closeAddUserModal();
+            location.reload(); // Recargar la página para mostrar el nuevo usuario
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("Error al registrar usuario: " + error.message);
+          });
+      }
+
+      // Cerrar modal al hacer clic fuera del contenido
+      window.onclick = function (event) {
+        const modal = document.getElementById("addUserModal");
+        if (event.target == modal) {
+          closeAddUserModal();
+        }
+      };
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Información de Todos los Usuarios</h1>
+      <button class="add-user-button" onclick="showAddUserModal()">
+        <i class="fas fa-user-plus"></i> Añadir Usuario
+      </button>
+      <table id="users-table">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>País</th>
+            <th>Rol</th>
+            <th>Contraseña</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Los datos de los usuarios se insertarán aquí -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Modal para añadir usuario -->
+    <div id="addUserModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">Registrar Nuevo Usuario</h2>
+          <button class="close-button" onclick="closeAddUserModal()">
+            &times;
+          </button>
+        </div>
+        <form id="addUserForm" onsubmit="registerUser(event)">
+          <div class="form-group">
+            <label for="newUsername">Nombre de Usuario:</label>
+            <input type="text" id="newUsername" required />
+          </div>
+          <div class="form-group">
+            <label for="newPassword">Contraseña:</label>
+            <div class="password-container">
+              <input type="password" id="newPassword" required />
+              <i
+                class="fas fa-eye"
+                onclick="toggleNewPasswordVisibility(this)"
+              ></i>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="newFirstName">Nombre:</label>
+            <input type="text" id="newFirstName" required />
+          </div>
+          <div class="form-group">
+            <label for="newLastName">Apellido:</label>
+            <input type="text" id="newLastName" required />
+          </div>
+          <div class="form-group">
+            <label for="newCountry">País:</label>
+            <input type="text" id="newCountry" required />
+          </div>
+          <div class="form-group">
+            <label for="newRole">Rol:</label>
+            <select id="newRole" required>
+              <option value="USER">USER</option>
+              <option value="ADMIN">ADMIN</option>
+            </select>
+          </div>
+          <div class="form-buttons">
+            <button
+              type="button"
+              class="cancel-button"
+              onclick="closeAddUserModal()"
+            >
+              Cancelar
+            </button>
+            <button type="submit" class="submit-button">Registrar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // Función para alternar la visibilidad de la contraseña en el formulario de registro
+      function toggleNewPasswordVisibility(icon) {
+        const passwordInput = document.getElementById("newPassword");
+        if (passwordInput.type === "password") {
+          passwordInput.type = "text";
+          icon.classList.remove("fa-eye");
+          icon.classList.add("fa-eye-slash");
+        } else {
+          passwordInput.type = "password";
+          icon.classList.remove("fa-eye-slash");
+          icon.classList.add("fa-eye");
+        }
+      }
+    </script>
+  </body>
+</html>

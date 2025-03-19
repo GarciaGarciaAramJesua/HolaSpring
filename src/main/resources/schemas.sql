@@ -1,0 +1,21 @@
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS role;
+
+CREATE TABLE role (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
+);
+
+INSERT INTO role (name) VALUES ('ROLE_ADMIN');
+INSERT INTO role (name) VALUES ('ROLE_USER');
+
+CREATE TABLE user (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL,
+    firstname VARCHAR(50),
+    lastname VARCHAR(50),
+    country VARCHAR(50),
+    role_id INT NOT NULL,
+    FOREIGN KEY (role_id) REFERENCES role(id)
+);

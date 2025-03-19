@@ -1,0 +1,58 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: johann21
+      MYSQL_DATABASE: tarea2
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./src/main/resources/schemas.sql:/docker-entrypoint-initdb.d/schemas.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pjohann21"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - spring-network
+
+  app:
+    build:
+      context: .
+      dockerfile: dockerfile
+    container_name: spring-app
+    restart: always
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8081:8081"
+      - "35729:35729" # Puerto para LiveReload
+    volumes:
+      - ./src:/app/src
+      - ./pom.xml:/app/pom.xml
+      - ./.env:/app/.env # Montar el archivo .env para compatibilidad
+      - maven-repo:/root/.m2
+    networks:
+      - spring-network
+    environment:
+      # Conexión a MySQL usando el nombre del servicio
+      DB_URL: jdbc:mysql://mysql:3306/tarea2?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      DB_USERNAME: root
+      DB_PASSWORD: johann21
+      JWT_SECRET: EsteEsUnSecretoMuySeguroParaFirmarElTokenCon256Bits!
+      # Configuración para desarrollo
+      SPRING_DEVTOOLS_RESTART_ENABLED: "true"
+      SPRING_DEVTOOLS_LIVERELOAD_ENABLED: "true"
+      SPRING_DEVTOOLS_REMOTE_SECRET: "mysecret"
+
+volumes:
+  mysql-data:
+  maven-repo:
+
+networks:
+  spring-network:
+    driver: bridge
