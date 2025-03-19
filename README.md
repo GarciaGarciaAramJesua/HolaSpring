@@ -1,8 +1,25 @@
-# Spring Boot Authentication Project
+# Spring Boot Authentication and User Management System
 
-In this project, you can find a complete Spring Boot application with JWT authentication and role-based authorization. This project provides a RESTful API for user management with various endpoints.
+This project is a comprehensive Spring Boot application designed to provide a secure and scalable solution for user authentication and management. It leverages JSON Web Tokens (JWT) for stateless authentication and implements role-based authorization to control access to various resources. The application offers a RESTful API that enables seamless user registration, authentication, and management, making it suitable for modern web and mobile applications.
 
-## Authentication API
+## Key Features
+- JWT Authentication: Secure user authentication using JSON Web Tokens, ensuring stateless and scalable sessions.
+- Role-Based Authorization: Fine-grained access control with roles such as USER and ADMIN, allowing for differentiated permissions.
+- RESTful API: A well-documented API for user management, including registration, login, profile updates, and administrative actions.
+- Database Integration: Integration with MySQL for persistent storage of user data, ensuring reliability and scalability.
+- Docker Support: Easy deployment and development using Docker and Docker Compose, with pre-configured environments for both backend and database services.
+- Security Best Practices: Passwords are securely hashed using BCrypt, and sensitive information is protected through environment variables.
+- Development Tools: Support for LiveReload and Spring DevTools to enhance the development experience.
+
+## Use Cases
+This application is ideal for:
+
+- Web and Mobile Applications: Provides a backend solution for user authentication and management.
+- Microservices Architecture: Can be integrated as an authentication service in a larger microservices ecosystem.
+- Educational Purposes: Demonstrates best practices in Spring Boot, JWT authentication, and role-based authorization.
+- Rapid Prototyping: Offers a ready-to-use backend for startups and developers looking to quickly implement user management features.
+
+## Authentication 
 
 The application provides several endpoints for user authentication and management:
 
@@ -280,6 +297,116 @@ To build and run with Docker Compose:
 docker-compose up --build
 ```
 
+## Dockerfiles
+
+The project includes the following Dockerfiles:
+
+```
+# Imagen base para compilar y desarrollo
+FROM maven:3.9-eclipse-temurin-21-alpine
+
+# Establece el directorio de trabajo
+WORKDIR /app
+
+# Instala herramientas necesarias
+RUN apk add --no-cache bash netcat-openbsd mysql-client dos2unix
+
+# Copia el archivo pom.xml para descargar dependencias
+COPY pom.xml .
+
+# Descarga dependencias
+RUN mvn dependency:go-offline -B
+
+# Copia el script start.sh
+COPY start.sh .
+
+# Convierte los finales de línea y establece permisos
+RUN dos2unix /app/start.sh && \
+    chmod +x /app/start.sh
+
+# Punto de entrada usando bash
+ENTRYPOINT ["/bin/bash", "/app/start.sh"]
+```
+
+### Docker Compose Configuration:
+
+The docker-compose.yml file configures the following services:
+
+1. MySQL Database:
+
+- Image: mysql:8.0
+- Port: 3306
+- Environment variables: MYSQL_ROOT_PASSWORD, MYSQL_DATABASE
+- Volumes: mysql-data for persistent storage and schemas.sql for initial database setup.
+
+2. Spring Boot Application:
+
+- Build context: Current directory
+- Ports: 8081 (application) and 35729 (LiveReload)
+- Environment variables: Database connection, JWT secret, and development tools configuration.
+- Volumes: Source code, Maven repository, and .env file for environment variables.
+
+```
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: johann21
+      MYSQL_DATABASE: tarea2
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./src/main/resources/schemas.sql:/docker-entrypoint-initdb.d/schemas.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pjohann21"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - spring-network
+
+  app:
+    build:
+      context: .
+      dockerfile: dockerfile
+    container_name: spring-app
+    restart: always
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8081:8081"
+      - "35729:35729" # Puerto para LiveReload
+    volumes:
+      - ./src:/app/src
+      - ./pom.xml:/app/pom.xml
+      - ./.env:/app/.env # Montar el archivo .env para compatibilidad
+      - maven-repo:/root/.m2
+    networks:
+      - spring-network
+    environment:
+      # Conexión a MySQL usando el nombre del servicio
+      DB_URL: jdbc:mysql://mysql:3306/tarea2?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      DB_USERNAME: root
+      DB_PASSWORD: johann21
+      JWT_SECRET: EsteEsUnSecretoMuySeguroParaFirmarElTokenCon256Bits!
+      # Configuración para desarrollo
+      SPRING_DEVTOOLS_RESTART_ENABLED: "true"
+      SPRING_DEVTOOLS_LIVERELOAD_ENABLED: "true"
+      SPRING_DEVTOOLS_REMOTE_SECRET: "mysecret"
+
+volumes:
+  mysql-data:
+  maven-repo:
+
+networks:
+  spring-network:
+    driver: bridge
+```
+
 ## Views
 
 The application provides the following views:
@@ -291,10 +418,10 @@ The application provides the following views:
 
 Por defecto, se carga un usuario administrador con las siguientes credenciales:
 
-- **Username**: `sudo`
-- **Lastname**: `user`
-- **Firstname**: `super`
-- **Country**: `not defined`
+- **Username**: `admin`
+- **Lastname**: `istrador`
+- **Firstname**: `admin`
+- **Country**: `Papua Nueva Guinea`
 - **Password**: `password` (encriptada con BCrypt)
 - **Role**: `ROLE_ADMIN`
 
@@ -306,6 +433,9 @@ Here are some screenshots of the application (You can find more in `screenshots/
 
 ### User Registration
 ![User Registration](./screenshots/Tarea3&Practica1/sign_up.png)
+
+### Admin Dashboard
+![Admin Dashboard](./screenshots/Tarea3&Practica1/home_admin.png)
 
 ### All Users
 ![All Users](./screenshots/Tarea3&Practica1/panel_users.png)
