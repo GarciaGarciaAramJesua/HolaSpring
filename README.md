@@ -277,14 +277,14 @@ The project follows a standard Spring Boot architecture:
 ## Discovery Books Details
 - Book classification: Sci-Fi, Fantasy, Fiction, Thriller & Biographies
 - Book details: Books' complete info:
-- - Cover
-- - Title
-- - Author(s)
-- - Publish date
-- - Editorial
-- - ISBN and pages' number
-- - Subjects
-- - Link to OpenLibrary
+  - Cover
+  - Title
+  - Author(s)
+  - Publish date
+  - Editorial
+  - ISBN and pages' number
+  - Subjects
+  - Link to OpenLibrary
 
 ## Security Configuration
 
@@ -431,6 +431,10 @@ The application provides the following views:
 
 - `/view/my-profile` - User profile page
 - `/view/admin/all-users` - Admin page to manage users
+- `/view/home` - Principal view of the system to discover books by subjects
+- `/view/libro-detalle` - Complete details about a specific book
+- `/view/login` - Login page
+- `/view/register` - Register new users page
 
 ## Default Admin User
 
