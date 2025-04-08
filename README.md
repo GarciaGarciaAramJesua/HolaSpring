@@ -1,23 +1,26 @@
-# Spring Boot Authentication and User Management System
+# EmmBook: Spring Boot Authentication & Book Discovery System
 
-This project is a comprehensive Spring Boot application designed to provide a secure and scalable solution for user authentication and management. It leverages JSON Web Tokens (JWT) for stateless authentication and implements role-based authorization to control access to various resources. The application offers a RESTful API that enables seamless user registration, authentication, and management, making it suitable for modern web and mobile applications.
+This project is a software engineering project built with Spring Boot, combining JWT-based authentication with integration to the OpenLibrary API. This platform allows users to discover and explore books organized by categories while providing a complete user management system.
 
 ## Key Features
 - JWT Authentication: Secure user authentication using JSON Web Tokens, ensuring stateless and scalable sessions.
-- Role-Based Authorization: Fine-grained access control with roles such as USER and ADMIN, allowing for differentiated permissions.
-- RESTful API: A well-documented API for user management, including registration, login, profile updates, and administrative actions.
+- User Management: Registration, login, profile updates, and administrative functions.
+- Role-Based Access Control: Differentiated permissions for regular users and admins.
+- RESTful API: A well-documented API for seamless frontend (web/mobile) integration.
 - Database Integration: Integration with MySQL for persistent storage of user data, ensuring reliability and scalability.
 - Docker Support: Easy deployment and development using Docker and Docker Compose, with pre-configured environments for both backend and database services.
 - Security Best Practices: Passwords are securely hashed using BCrypt, and sensitive information is protected through environment variables.
 - Development Tools: Support for LiveReload and Spring DevTools to enhance the development experience.
+- OpenLibrary API Integration: Fetch and explore books from OpenLibrary’s public database.
+- Category-Based Organization: Books are sorted into categories for easy discovery.
 
 ## Use Cases
-This application is ideal for:
+EmmBook is ideal for:
 
-- Web and Mobile Applications: Provides a backend solution for user authentication and management.
-- Microservices Architecture: Can be integrated as an authentication service in a larger microservices ecosystem.
-- Educational Purposes: Demonstrates best practices in Spring Boot, JWT authentication, and role-based authorization.
-- Rapid Prototyping: Offers a ready-to-use backend for startups and developers looking to quickly implement user management features.
+- Educational Projects: Demonstrates Spring Boot best practices, JWT auth, and external API consumption.
+- Book Discovery Platforms: Lets users explore books in an organized way.
+- Rapid Prototyping: A ready-to-use backend for startups needing user auth + book data.
+- Microservices: Can be integrated as an authentication module in larger systems.
 
 ## Authentication 
 
@@ -264,9 +267,24 @@ The project follows a standard Spring Boot architecture:
 - `config` package: Contains security configuration
 - `controllers` package: REST and view controllers
 - `dtos` package: Data Transfer Objects
+- `exception` package: Errors & exceptions management
 - `model` package: Entity classes
 - `repository` package: Data access layer
 - `service` package: Business logic
+- `resources/templates` package: HTML templates for View
+- `resources/static` package: CSS, JS & images resources
+
+## Discovery Books Details
+- Book classification: Sci-Fi, Fantasy, Fiction, Thriller & Biographies
+- Book details: Books' complete info:
+- - Cover
+- - Title
+- - Author(s)
+- - Publish date
+- - Editorial
+- - ISBN and pages' number
+- - Subjects
+- - Link to OpenLibrary
 
 ## Security Configuration
 
@@ -416,23 +434,25 @@ The application provides the following views:
 
 ## Default Admin User
 
-Por defecto, se carga un usuario administrador con las siguientes credenciales:
+By default, is defined the user admin with the following credentials:
 
 - **Username**: `admin`
 - **Lastname**: `istrador`
 - **Firstname**: `admin`
 - **Country**: `Papua Nueva Guinea`
-- **Password**: `password` (encriptada con BCrypt)
+- **Password**: `password` (encrypted by BCrypt)
 - **Role**: `ROLE_ADMIN`
 
-Puedes utilizar estas credenciales para probar las funcionalidades de administrador.
 
 ## Screenshots
 
-Here are some screenshots of the application (You can find more in `screenshots/Tarea3&Practica1/` route)
+Here are some screenshots of the application (You can find more in `screenshots/Tarea3&Practica1/` and `screenshots/Practica2/` routes)
 
 ### User Registration
 ![User Registration](./screenshots/Tarea3&Practica1/sign_up.png)
+
+### User Registration (Dark Theme)
+![User Registration (Dark Theme)](./screenshots/Practica2/sign_up_darkt.png)
 
 ### Admin Dashboard
 ![Admin Dashboard](./screenshots/Tarea3&Practica1/home_admin.png)
@@ -440,11 +460,34 @@ Here are some screenshots of the application (You can find more in `screenshots/
 ### All Users
 ![All Users](./screenshots/Tarea3&Practica1/panel_users.png)
 
+### All Users (Dark Theme)
+![All Users (Dark Theme)](./screenshots/Practica2/panel_users_darkt.png)
+
 ### New Users Form
 ![All Users](./screenshots/Tarea3&Practica1/add_new_users.png)
 
 ### User Profile
 ![User Profile](./screenshots/Tarea3&Practica1/personal_info.png)
 
+### User Profile (Dark Theme)
+![User Profile (Dark Theme)](./screenshots/Practica2/personal_info_darkt.png)
+
 ### Login
 ![Login](./screenshots/Tarea3&Practica1/login.png)
+
+### Login (Dark Theme)
+![Login (Dark Theme)](./screenshots/Practica2/login_darkt.png)
+
+### Home (Dark Theme)
+![Home (Dark Theme)](./screenshots/Practica2/home_darkt.png)
+
+### Book Cover
+![Book Cover](./screenshots/Practica2/book_cover.png)
+
+### Book Details
+![Book Details](./screenshots/Practica2/book_details.png)
+
+### Book Details (Dark Theme)
+![Book Details (Dark Theme)](./screenshots/Practica2/book_details_darkt.png)
+
+ 

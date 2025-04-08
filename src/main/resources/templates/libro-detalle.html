@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del libro | EmmBook </title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/books.css">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Swiper Carousel para recomendaciones -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css">
+</head>
+<body>
+    <!-- El header será inyectado aquí -->
+    <header id="global-header"></header>
+
+    <div class="container">
+        <div id="loading-container" class="loading-container">
+            <div class="loading-spinner-container"></div>
+            <p>Cargando detalles del libro...</p>
+        </div>
+
+        <div class="back-link">
+            <a href="/home" class="btn-back"><i class="fas fa-arrow-left"></i> Volver a inicio</a>
+        </div>
+
+        <div id="book-details" class="book-details-container" style="display: none;">
+            <div class="book-cover-container">
+                <img id="book-cover" src="/img/default-cover.jpg" alt="Portada del libro" class="book-detail-cover">
+            </div>
+            <div class="book-info">
+                <h1 id="book-title">Título del libro</h1>
+                <div class="book-authors">
+                    <span>Por </span><span id="book-authors">Autor/es</span>
+                </div>
+                <div class="book-publish-info">
+                    <span id="book-publish-date">Fecha de publicación</span> • 
+                    <span id="book-publisher">Editorial</span>
+                </div>
+                <div class="book-identifiers">
+                    <div id="book-isbn" class="book-identifier">
+                        <strong>ISBN:</strong> <span>-</span>
+                    </div>
+                    <div id="book-pages" class="book-identifier">
+                        <strong>Páginas:</strong> <span>-</span>
+                    </div>
+                </div>
+                <div class="book-description">
+                    <h3>Descripción</h3>
+                    <p id="book-description-text">Cargando descripción...</p>
+                </div>
+                <div class="book-subjects">
+                    <h3>Categorías</h3>
+                    <div id="book-subjects-list" class="subject-tags">
+                        <!-- Tags se cargarán dinámicamente -->
+                    </div>
+                </div>
+                <div class="book-links">
+                    <a id="open-library-link" href="#" target="_blank" class="btn btn-primary">
+                        <i class="fas fa-external-link-alt"></i> Ver en Open Library
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="error-container" class="error-container" style="display: none;">
+            <div class="error-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h2>No se pudo cargar el libro</h2>
+            <p id="error-message">Ha ocurrido un error al intentar cargar los detalles del libro.</p>
+            <a href="/home" class="btn btn-primary">Volver a inicio</a>
+        </div>
+    </div>
+
+    <!-- Swiper JS -->
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+    <script src="/js/utils.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/theme.js"></script>
+    <script src="/js/my-profile-script.js"></script>
+    <script src="/js/header.js"></script>
+    <script src="/js/books.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Página de detalles cargada');
+            redirectIfNotAuthenticated();
+            loadGlobalHeader();
+            
+            // Pequeño retraso para asegurar que otros elementos estén listos
+            setTimeout(() => {
+                loadBookDetails();
+            }, 100);
+        });
+    </script>
+</body>
+</html>

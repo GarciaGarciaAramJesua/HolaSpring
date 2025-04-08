@@ -15,19 +15,24 @@ public class DataInitializer {
     @Bean
     CommandLineRunner initDatabase(UserRepository userRepository, RoleRepository roleRepository) {
         return args -> {
-            Role role = new Role();
-            role.setName("ROLE_ADMIN");
-            roleRepository.save(role);
+            if(userRepository.findByUsername("sudo").isEmpty()) {
+                // Buscar el rol ADMIN en lugar de crearlo
+                Role adminRole = roleRepository.findByName("ROLE_ADMIN")
+                        .orElseThrow(() -> new RuntimeException("Rol ADMIN no encontrado"));
 
-            User user = User.builder()
-                    .username("admin")
-                    .lastname("istrador")
-                    .firstname("admin")
-                    .country("Papua Nueva Guinea")
-                    .password(new BCryptPasswordEncoder().encode("password"))
-                    .role(role)
-                    .build();
-            userRepository.save(user);
+                User user = User.builder()
+                        .username("admin")
+                        .lastname("istrador")
+                        .firstname("admin")
+                        .country("Papua Nueva Guinea")
+                        .password(new BCryptPasswordEncoder().encode("password"))
+                        .role(adminRole)
+                        .build();
+                userRepository.save(user);
+                System.out.println("Usuario admin creado con rol ADMIN.");
+            } else {
+                System.out.println("Usuario admin con rol ADMIN ya existe en el sistema.");
+            }
         };
     }
 }

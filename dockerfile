@@ -5,7 +5,7 @@ FROM maven:3.9-eclipse-temurin-21-alpine
 WORKDIR /app
 
 # Instala herramientas necesarias
-RUN apk add --no-cache bash netcat-openbsd mysql-client dos2unix
+RUN apk add --no-cache bash mysql-client
 
 # Copia el archivo pom.xml para descargar dependencias
 COPY pom.xml .
@@ -13,12 +13,5 @@ COPY pom.xml .
 # Descarga dependencias
 RUN mvn dependency:go-offline -B
 
-# Copia el script start.sh
-COPY start.sh .
-
-# Convierte los finales de línea y establece permisos
-RUN dos2unix /app/start.sh && \
-    chmod +x /app/start.sh
-
 # Punto de entrada usando bash
-ENTRYPOINT ["/bin/bash", "/app/start.sh"]
+CMD ["mvn", "spring-boot:run", "-Dspring-boot.run.jvmArguments=-Dspring.devtools.restart.enabled=true -Dspring.devtools.livereload.enabled=true"]

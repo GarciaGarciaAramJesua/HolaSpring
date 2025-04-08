@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenBook - Explora el mundo de la lectura</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/books.css">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Swiper Carousel -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css">
+</head>
+<body>
+    <!-- El header será inyectado aquí -->
+    <header id="global-header"></header>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-content">
+                <h1>Infinidad de libros en línea encontrarás en <span class="highlight">EmmBook</span></h1>
+                <p class="subtitle">Descubre miles de libros de todas las categorías, desde clásicos literarios 
+                    hasta las últimas novedades. Únete a nuestra comunidad de lectores apasionados.</p>
+                <a href="/home" class="cta-button">Explorar Libros</a>
+                <div class="search-container">
+                    <input type="text" id="search-input" placeholder="Buscar por título, autor o ISBN...">
+                    <button id="search-button"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="/images/library.jpg" alt="Biblioteca con estantes llenos de libros" >
+            </div>    
+        </div>
+
+        <div id="loading-container" class="loading-container">
+            <div class="loading-spinner-container"></div>
+            <p>Cargando libros recomendados...</p>
+        </div>
+
+        <div id="categories-container">
+            <!-- Las categorías se cargarán dinámicamente -->
+            <div class="category-section" data-category="fiction">
+                <h2 class="category-title">Ficción</h2>
+                <div class="books-container">
+                    <!-- Los libros se cargarán dinámicamente -->
+                </div>
+            </div>
+
+            <div class="category-section" data-category="fantasy">
+                <h2 class="category-title">Fantasía</h2>
+                <div class="books-container">
+                    <!-- Los libros se cargarán dinámicamente -->
+                </div>
+            </div>
+
+            <div class="category-section" data-category="science_fiction">
+                <h2 class="category-title">Ciencia Ficción</h2>
+                <div class="books-container">
+                    <!-- Los libros se cargarán dinámicamente -->
+                </div>
+            </div>
+
+            <div class="category-section" data-category="mystery">
+                <h2 class="category-title">Misterio</h2>
+                <div class="books-container">
+                    <!-- Los libros se cargarán dinámicamente -->
+                </div>
+            </div>
+            
+            <div class="category-section" data-category="biography">
+                <h2 class="category-title">Biografías</h2>
+                <div class="books-container">
+                    <!-- Los libros se cargarán dinámicamente -->
+                </div>
+            </div>
+        </div>
+
+        <div id="search-results" class="search-results hidden">
+            <h2>Resultados de búsqueda</h2>
+            <div class="books-container">
+                <!-- Los resultados de búsqueda se cargarán dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Swiper JS -->
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+    <script src="/js/utils.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/theme.js"></script>
+    <script src="/js/my-profile-script.js"></script>
+    <script src="/js/header.js"></script>
+    <script src="/js/books.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            redirectIfNotAuthenticated();
+            loadGlobalHeader();
+            setupHomePage();
+        });
+    </script>
+</body>
+</html>

@@ -1,58 +1,18 @@
-:root {
-  --primary-color: #6A1B9A;
-  --secondary-color: #AB47BC;
-  --background-color: #F3E5F5;
-  --text-color: #4A148C;
-  --accent-color: #7E57C2;
-  --white: #ffffff;
-  --error-color: #D32F2F;
-  --error-dark: #B71C1C;
-  --light-gray: #a588d18b;
-  --success-color: #388E3C;
-}
+/* Estilos específicos para la página de administración */
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Roboto', sans-serif;
-}
-
-body {
-  background-image: url('/images/pawel-czerwinski-ItcfEC4dIvw-unsplash.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  color: var(--text-color);
-  line-height: 1.6;
-  margin: 20px;
-  padding: 20px;
-}
-
-body::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.3); /* 70% de transparencia */
-  z-index: -1;
-}
-
-.container {
+.admin-container {
   max-width: 1200px;
   margin: 0 auto;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: var(--card-bg);
+  box-shadow: 0 4px 6px var(--shadow-color);
   border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   padding: 30px;
   position: relative;
   overflow: hidden;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-h1 {
+.admin-header {
   color: var(--primary-color);
   text-align: center;
   padding: 20px 0;
@@ -60,38 +20,48 @@ h1 {
   background-color: var(--accent-color);
   font-weight: 300;
   letter-spacing: 1px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-table {
+[data-theme="dark"] .admin-header {
+  color: var(--header-text);
+}
+
+.admin-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: var(--white);
+  background-color: var(--card-bg);
+  transition: background-color 0.3s ease;
 }
 
-thead {
+.admin-table thead {
   background-color: var(--secondary-color);
   color: var(--white);
 }
 
-th, td {
+.admin-table th {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-transform: uppercase;
+  font-size: 0.9em;
+  letter-spacing: 0.5px;
+  font-weight: 600;
   padding: 12px 15px;
   text-align: left;
   border-bottom: 1px solid var(--accent-color);
 }
 
-th {
-  text-transform: uppercase;
-  font-size: 0.9em;
-  letter-spacing: 0.5px;
-  font-weight: 600;
+.admin-table td {
+  padding: 10px 15px;
+  text-align: left;
+  border-bottom: 1px solid var(--accent-color);
 }
 
-tr:nth-child(even) {
-  background-color: rgba(171, 71, 188, 0.05);
+.admin-table tr:nth-child(even) {
+  background-color: var(--table-stripe);
 }
 
-tr:hover {
-  background-color: rgba(171, 71, 188, 0.1);
+.admin-table tr:hover {
+  background-color: var(--table-hover);
   transition: background-color 0.3s ease;
 }
 
@@ -125,28 +95,27 @@ tr:hover {
   background-color: var(--error-dark);
 }
 
-input, select {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid var(--accent-color);
+.add-user-button {
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: none;
+  padding: 10px 20px;
   border-radius: 8px;
   font-size: 1em;
-}
-
-.password-container {
-  display: flex;
-  align-items: center;
-}
-
-.password-container input {
-  flex: 1;
-}
-
-.password-container i {
   cursor: pointer;
-  margin-left: 5px;
+  margin: 20px 0;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
+.add-user-button:hover {
+  background-color: var(--secondary-color);
+  transform: scale(1.05);
+}
+
+/* Modal */
 .modal {
   display: none;
   position: fixed;
@@ -159,13 +128,14 @@ input, select {
 }
 
 .modal-content {
-  background-color: var(--white);
+  background-color: var(--card-bg);
   margin: 10% auto;
   padding: 20px;
   border-radius: 15px;
   width: 80%;
   max-width: 500px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px var(--shadow-color);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .modal-header {
@@ -183,6 +153,10 @@ input, select {
   margin: 0;
 }
 
+[data-theme="dark"] .modal-title {
+  color: var(--header-text);
+}
+
 .close-button {
   font-size: 1.5em;
   cursor: pointer;
@@ -193,12 +167,6 @@ input, select {
 
 .form-group {
   margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
 }
 
 .form-buttons {
@@ -226,37 +194,47 @@ input, select {
   color: var(--white);
 }
 
-.add-user-button {
-  background-color: var(--primary-color);
-  color: var(--white);
-  border: none;
-  padding: 10px 20px;
+.password-container {
+  display: flex;
+  align-items: center;
+}
+
+.password-container input {
+  flex: 1;
+}
+
+.password-container i {
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+input, select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   font-size: 1em;
-  cursor: pointer;
-  margin: 20px 0;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-.add-user-button:hover {
-  background-color: var(--secondary-color);
-  transform: scale(1.05);
-}
-
-@media screen and (max-width: 600px) {
-  table {
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .admin-table {
       font-size: 0.9em;
   }
 
-  th, td {
+  .admin-table th, .admin-table td {
       padding: 8px 10px;
   }
 
   .modal-content {
       width: 95%;
       margin: 5% auto;
+  }
+  
+  .action-buttons {
+      flex-direction: column;
   }
 }

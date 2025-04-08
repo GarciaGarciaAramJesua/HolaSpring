@@ -9,6 +9,33 @@
   --error-dark: #B71C1C;
   --light-gray: #a588d18b;
   --success-color: #388E3C;
+  --card-bg: rgba(255, 255, 255, 0.7);
+  --shadow-color: rgba(0, 0, 0, 0.2);
+  --border-color: #7E57C2;
+  --input-bg: #ffffff;
+  --header-text: #4A148C;
+  --label-color: #6A1B9A;
+  --disabled-text: #7E57C2;
+}
+
+[data-theme="dark"] {
+  --primary-color: #BA68C8;
+  --secondary-color: #AB47BC;
+  --background-color: #1A0321;
+  --text-color: #EDE7F6;
+  --accent-color: #9C27B0;
+  --white: #4A148C;
+  --error-color: #EF5350;
+  --error-dark: #D32F2F;
+  --light-gray: #4A148C;
+  --success-color: #66BB6A;
+  --card-bg: rgba(74, 20, 140, 0.7);
+  --shadow-color: rgba(0, 0, 0, 0.4);
+  --border-color: #7E57C2;
+  --input-bg: #6A1B9A;
+  --header-text: #EDE7F6;
+  --label-color: #D1C4E9;
+  --disabled-text: #B39DDB;
 }
 
 * {
@@ -28,6 +55,7 @@ body {
   line-height: 1.6;
   margin: 20px;
   padding: 20px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body::before {
@@ -37,20 +65,21 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.3); /*70% de transparencia */
+  background-color: rgba(255, 255, 255, 0.3);
   z-index: -1;
+  transition: background-color 0.3s ease;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: var(--card-bg);
   border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 20px var(--shadow-color);
   padding: 30px;
   position: relative;
   overflow: hidden;
+  transition: all 0.3s ease;
 }
 
 header {
@@ -59,28 +88,39 @@ header {
   padding: 20px;
   border-radius: 15px;
   margin-bottom: 30px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 20px var(--shadow-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: all 0.3s ease;
 }
 
 header h1 {
   font-size: 24px;
   font-weight: 700;
+  transition: color 0.3s ease;
+}
+
+.user-welcome {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .content-wrapper {
   display: flex;
   gap: 30px;
+  flex-wrap: wrap;
 }
 
 .profile-card {
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: var(--card-bg);
   border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 20px var(--shadow-color);
   padding: 30px;
   flex: 1;
+  min-width: 300px;
+  transition: all 0.3s ease;
 }
 
 .profile-header {
@@ -96,6 +136,11 @@ header h1 {
   color: var(--primary-color);
   font-size: 22px;
   font-weight: 700;
+  transition: color 0.3s ease;
+}
+
+[data-theme="dark"] .profile-header h2 {
+  color: var(--header-text);
 }
 
 .form-group {
@@ -107,15 +152,23 @@ label {
   margin-bottom: 8px;
   font-weight: 500;
   color: var(--primary-color);
+  transition: color 0.3s ease;
+}
+
+[data-theme="dark"] label {
+  color: var(--label-color);
 }
 
 input[type="text"] {
   width: 100%;
   padding: 12px 15px;
-  border: 1px solid var(--light-gray);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   font-size: 16px;
   transition: all 0.3s ease;
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  font-family: 'Roboto', sans-serif;
 }
 
 input[type="text"]:focus {
@@ -126,7 +179,8 @@ input[type="text"]:focus {
 
 input[type="text"]:disabled {
   background-color: var(--light-gray);
-  color: #777;
+  color: var(--disabled-text);
+  opacity: 0.7;
   cursor: not-allowed;
 }
 
@@ -152,6 +206,7 @@ input[type="text"]:disabled {
 .btn-primary:hover {
   background-color: var(--primary-color);
   transform: translateY(-2px);
+  box-shadow: 0 3px 10px var(--shadow-color);
 }
 
 .btn-danger {
@@ -162,6 +217,7 @@ input[type="text"]:disabled {
 .btn-danger:hover {
   background-color: var(--error-dark);
   transform: translateY(-2px);
+  box-shadow: 0 3px 10px rgba(211, 47, 47, 0.3);
 }
 
 .btn-success {
@@ -172,6 +228,7 @@ input[type="text"]:disabled {
 .btn-success:hover {
   background-color: #27ae60;
   transform: translateY(-2px);
+  box-shadow: 0 3px 10px rgba(46, 204, 113, 0.3);
 }
 
 .btn-admin {
@@ -187,6 +244,13 @@ input[type="text"]:disabled {
 .btn-admin:hover {
   background-color: var(--primary-color);
   color: var(--white);
+  transform: translateY(-2px);
+}
+
+.btn-admin svg {
+  width: 18px;
+  height: 18px;
+  transition: fill 0.3s ease;
 }
 
 .button-group {
@@ -195,40 +259,91 @@ input[type="text"]:disabled {
   margin-top: 20px;
 }
 
+.loading-container {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  text-align: center;
+}
+
+.loading-spinner-container {
+  border: 4px solid var(--border-color);
+  border-top: 4px solid var(--primary-color);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 .fade-in {
   animation: fadeIn 0.5s ease-in;
 }
 
 @keyframes fadeIn {
   from {
-      opacity: 0;
-      transform: translateY(10px);
+    opacity: 0;
+    transform: translateY(10px);
   }
   to {
-      opacity: 1;
-      transform: translateY(0);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
 @media (max-width: 768px) {
   .content-wrapper {
-      flex-direction: column;
+    flex-direction: column;
   }
 
   header {
-      flex-direction: column;
-      gap: 15px;
-      text-align: center;
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
   }
 
   .profile-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 15px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
   }
 
   .button-group {
-      flex-direction: column;
-      width: 100%;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .user-welcome {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    margin: 10px;
+    padding: 10px;
+  }
+  
+  .container {
+    padding: 20px;
+  }
+  
+  .profile-card {
+    padding: 20px;
+  }
+  
+  input[type="text"] {
+    padding: 10px 12px;
   }
 }

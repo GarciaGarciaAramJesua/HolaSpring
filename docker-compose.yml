@@ -23,18 +23,18 @@ services:
     build:
       context: .
       dockerfile: dockerfile
+    image: image-spring-app
     container_name: spring-app
     restart: always
     depends_on:
       mysql:
-        condition: service_healthy
+        condition: service_healthy 
     ports:
-      - "8081:8081"
+      - "8080:8080"
       - "35729:35729" # Puerto para LiveReload
     volumes:
-      - ./src:/app/src
-      - ./pom.xml:/app/pom.xml
-      - ./.env:/app/.env # Montar el archivo .env para compatibilidad
+      - ./:/app
+      - /app/target # Montar el directorio de destino para evitar recompilaciones innecesarias
       - maven-repo:/root/.m2
     networks:
       - spring-network
@@ -44,10 +44,6 @@ services:
       DB_USERNAME: root
       DB_PASSWORD: johann21
       JWT_SECRET: EsteEsUnSecretoMuySeguroParaFirmarElTokenCon256Bits!
-      # Configuración para desarrollo
-      SPRING_DEVTOOLS_RESTART_ENABLED: "true"
-      SPRING_DEVTOOLS_LIVERELOAD_ENABLED: "true"
-      SPRING_DEVTOOLS_REMOTE_SECRET: "mysecret"
 
 volumes:
   mysql-data:

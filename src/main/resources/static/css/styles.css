@@ -9,7 +9,43 @@
     --error-dark: #B71C1C;
     --light-gray: #EDE7F6;
     --success-color: #388E3C;
+    --success-dark: #2E7D32;
+    --card-bg: #ffffff;
+    --border-color: #7E57C2;
+    --input-bg: #ffffff;
+    --shadow-color: rgba(0, 0, 0, 0.2);
+    --table-stripe: rgba(171, 71, 188, 0.05);
+    --table-hover: rgba(171, 71, 188, 0.1);
+    --label-color: #6A1B9A;
+    --link-color: #7E57C2;
+    --header-text: #6A1B9A;
+    --disabled-text: #B39DDB;
 }
+
+[data-theme="dark"] {
+    --primary-color: #BA68C8;
+    --secondary-color: #AB47BC;
+    --background-color: #1A0321;
+    --text-color: #EDE7F6;
+    --accent-color: #9C27B0;
+    --white: #4A148C;
+    --error-color: #EF5350;
+    --error-dark: #D32F2F;
+    --light-gray: #4A148C;
+    --success-color: #66BB6A;
+    --success-dark: #388E3C;
+    --card-bg: #4A148C;
+    --border-color: #7E57C2;
+    --input-bg: #6A1B9A;
+    --shadow-color: rgba(0, 0, 0, 0.4);
+    --table-stripe: rgba(171, 71, 188, 0.1);
+    --table-hover: rgba(171, 71, 188, 0.2);
+    --label-color: #D1C4E9;
+    --link-color: #B39DDB;
+    --header-text: #EDE7F6;
+    --disabled-text: #7E57C2;
+}
+
 
 * {
     margin: 0;
@@ -19,26 +55,119 @@
 }
 
 body {
-    background-color: var(--background-color);
+    background-image: url('/images/pawel-czerwinski-YuJm-d7k2Jg-unsplash.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     color: var(--text-color);
     line-height: 1.6;
-    margin: 20px;
-    padding: 20px;
+    /*margin: 20px;
+    padding: 20px;*/
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+[data-theme="dark"] body {
+    background-image: url('/images/pawel-czerwinski-ItcfEC4dIvw-unsplash.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.3);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    z-index: -1;
+    transition: background-color 0.3s ease;
+}
+
+[data-theme="dark"] body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    z-index: -1;
+    transition: background-color 0.3s ease;
 }
 
 .container {
-    background-color: var(--white);
+    background-color: var(--card-bg);
     border-radius: 15px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 20px var(--shadow-color);
     width: 100%;
     max-width: 1200px;
-    padding: 30px;
+    margin: 0 auto;
+    padding: 20px;
     position: relative;
     overflow: hidden;
 }
 
+.btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background-color: var(--secondary-color);
+    color: var(--white);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(126, 87, 194, 0.2);
+}
+
+.btn-danger {
+    background-color: var(--error-color);
+    color: var(--white);
+}
+
+.btn-danger:hover {
+    background-color: var(--error-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
+}
+
+.btn-success {
+    background-color: var(--success-color);
+    color: var(--white);
+}
+
+.btn-success:hover {
+    background-color: var(--success-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(46, 204, 113, 0.3);
+}
+/*
 h1, h2 {
-    color: var(--primary-color);
+    color: var(--header-text);
     text-align: center;
     margin-bottom: 25px;
     font-weight: 700;
@@ -57,7 +186,7 @@ h1 {
 table {
     width: 100%;
     border-collapse: collapse;
-    background-color: var(--white);
+    background-color: var(--card-bg);
 }
 
 thead {
@@ -68,7 +197,7 @@ thead {
 th, td {
     padding: 12px 15px;
     text-align: left;
-    border-bottom: 1px solid var(--accent-color);
+    border-bottom: 1px solid var(--border-color);
 }
 
 th {
@@ -79,11 +208,11 @@ th {
 }
 
 tr:nth-child(even) {
-    background-color: rgba(171, 71, 188, 0.05);
+    background-color: var(--table-stripe);
 }
 
 tr:hover {
-    background-color: rgba(171, 71, 188, 0.1);
+    background-color: var(--table-hover);
     transition: background-color 0.3s ease;
 }
 
@@ -101,12 +230,13 @@ tr:hover {
     border-radius: 8px;
     cursor: pointer;
     font-size: 0.9em;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .action-buttons button:hover {
     background-color: var(--secondary-color);
-    transform: scale(1.05);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(106, 27, 154, 0.3);
 }
 
 .action-buttons button:last-child {
@@ -114,15 +244,17 @@ tr:hover {
 }
 
 .action-buttons button:last-child:hover {
-    background-color: var(--error-dark);
+    box-shadow: 0 3px 10px rgba(211, 47, 47, 0.3);
 }
 
 input, select {
     width: 100%;
     padding: 8px;
-    border: 1px solid var(--accent-color);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     font-size: 1em;
+    background-color: var(--input-bg);
+    color: var(--text-color);
 }
 
 .password-container {
@@ -137,6 +269,7 @@ input, select {
 .password-container i {
     cursor: pointer;
     margin-left: 5px;
+    color: var(--text-color);
 }
 
 .modal {
@@ -151,20 +284,20 @@ input, select {
 }
 
 .modal-content {
-    background-color: var(--white);
+    background-color: var(--card-bg);
     margin: 10% auto;
     padding: 20px;
     border-radius: 15px;
     width: 80%;
     max-width: 500px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 20px var(--shadow-color);
 }
 
 .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid var(--accent-color);
+    border-bottom: 1px solid var(--border-color);
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
@@ -191,6 +324,7 @@ input, select {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
+    color: var(--label-color);
 }
 
 .form-buttons {
@@ -206,6 +340,7 @@ input, select {
     border-radius: 8px;
     cursor: pointer;
     font-size: 1em;
+    transition: all 0.3s ease;
 }
 
 .cancel-button {
@@ -213,9 +348,21 @@ input, select {
     color: var(--white);
 }
 
+.cancel-button:hover {
+    background-color: var(--error-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(211, 47, 47, 0.3);
+}
+
 .submit-button {
     background-color: var(--primary-color);
     color: var(--white);
+}
+
+.submit-button:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(106, 27, 154, 0.3);
 }
 
 .add-user-button {
@@ -230,16 +377,141 @@ input, select {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .add-user-button:hover {
     background-color: var(--secondary-color);
-    transform: scale(1.05);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(106, 27, 154, 0.3);
+}*/
+
+/* Toast notification */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 15px 25px;
+    border-radius: 6px;
+    box-shadow: 0 4px 8px var(--shadow-color);
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1000;
 }
 
-@media screen and (max-width: 600px) {
-    table {
+.toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.toast.success {
+    background-color: var(--success-color);
+}
+
+.toast.error {
+    background-color: var(--error-color);
+}
+
+/* Theme toggle button */
+.theme-toggle {
+    position: fixed;
+    top: 75px;
+    right: 20px;
+    bottom: auto;
+    left: auto;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: var(--secondary-color);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 4px 10px var(--shadow-color);
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+    background-color: var(--primary-color);
+}
+
+.theme-toggle i {
+    font-size: 1.5rem;
+    transition: transform 0.5s ease;
+}
+
+.theme-toggle:hover i {
+    transform: rotate(30deg);
+}
+
+/* Añadir esto para el tema oscuro */
+[data-theme="dark"] .theme-toggle-header {
+    color: var(--white);
+}
+
+[data-theme="dark"] .theme-toggle-header:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s linear infinite;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    /*body {
+        margin: 10px;
+        padding: 10px;
+    }*/
+    
+    .container {
+        padding: 15px;
+    }
+
+    .btn {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+    
+    /*table {
         font-size: 0.9em;
     }
 
@@ -250,5 +522,33 @@ input, select {
     .modal-content {
         width: 95%;
         margin: 5% auto;
+    }*/
+    
+    .theme-toggle {
+        width: 40px;
+        height: 40px;
+        bottom: 10px;
+        left: 10px;
     }
+    
+    .theme-toggle i {
+        font-size: 1.2rem;
+    }
+    
+    /*.action-buttons button,
+    .form-buttons button,
+    .add-user-button {
+        padding: 8px 12px;
+        font-size: 0.9em;
+    }*/
 }
+
+/*@media screen and (max-width: 600px) {
+    table {
+        font-size: 0.85em;
+    }
+
+    th, td {
+        padding: 6px 8px;
+    }
+}*/
