@@ -132,7 +132,8 @@ function formatBookData(book) {
  * @param {Array} books - Libros a renderizar
  * @param {HTMLElement} container - Contenedor donde renderizar
  */
-function renderBooks(books, container) {
+
+/*function renderBooks(books, container) {
     
     if (!books || books.length === 0) {
         container.innerHTML = '<p class="no-results">No se encontraron libros en esta categoría.</p>';
@@ -239,7 +240,63 @@ function renderBooks(books, container) {
             }
         }
     });*/
+//}
+
+function renderBooks(books, container) {
+    // Destruir Swiper previo si existe
+    if (container.swiper) {
+        container.swiper.destroy();
+    }
+
+    // Limpiar contenedor
+    container.innerHTML = '';
+
+    if (!books.length) {
+        container.innerHTML = '<p class="no-results">No hay libros disponibles.</p>';
+        return;
+    }
+
+    // Crear estructura del carrusel
+    const swiperHTML = `
+        <div class="swiper-container book-carousel">
+            <div class="swiper-wrapper">
+                ${books.map(book => `
+                    <div class="swiper-slide">
+                        <div class="book-card" onclick="window.location.href='/libro-detalle?id=${book.id}'">
+                            <div class="book-cover">
+                                <img src="${book.coverUrl}" alt="${book.title}" onerror="this.src='${DEFAULT_COVER}'">
+                            </div>
+                            <div class="book-info">
+                                <h3>${book.title}</h3>
+                                <p>${book.authors}</p>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+    `;
+
+    container.innerHTML = swiperHTML;
+
+    // Inicializar Swiper
+    container.swiper = new Swiper('.swiper-container', {
+        slidesPerView: 3,
+        spaceBetween: 20,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+            320: { slidesPerView: 1 },
+            768: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 }
+        }
+    });
 }
+
 
 /**
  * Configura la funcionalidad de búsqueda
@@ -280,10 +337,22 @@ function searchBooks(query) {
     const categoriesContainer = document.getElementById('categories-container');
     const loadingContainer = document.getElementById('loading-container');
     
+    // Validar contenedores
+    if (!searchResultsContainer || !booksContainer || !categoriesContainer || !loadingContainer) {
+        console.error("Elementos del DOM no encontrados");
+        return;
+    }
+
+    // Resetear estado
+    booksContainer.innerHTML = '';
+    searchResultsContainer.classList.remove('hidden');
+    categoriesContainer.classList.add('hidden');
+    loadingContainer.style.display = 'flex';
+
     // Mostrar carga
-    toggleElement(loadingContainer, true, 'flex');
-    toggleElement(categoriesContainer, false);
-    toggleElement(searchResultsContainer, false);
+    //toggleElement(loadingContainer, true, 'flex');
+    //toggleElement(categoriesContainer, false);
+    //toggleElement(searchResultsContainer, false);
     
     // Realizar búsqueda
     fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=20`)
@@ -299,7 +368,7 @@ function searchBooks(query) {
             toggleElement(searchResultsContainer, true, 'block');
             
             if (data && data.docs && data.docs.length > 0) {
-                const books = data.docs.map(book => ({
+                /*const books = data.docs.map(book => ({
                     id: book.key ? book.key.replace('/works/', '') : null,
                     title: book.title || 'Título desconocido',
                     authors: book.author_name ? book.author_name.join(', ') : 'Autor desconocido',
@@ -308,8 +377,8 @@ function searchBooks(query) {
                         `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : 
                         DEFAULT_COVER,
                     publishYear: book.first_publish_year || 'Año desconocido'
-                }));
-                
+                }));*/
+                const books = data.docs.map(formatBookData);
                 renderBooks(books, booksContainer);
             } else {
                 booksContainer.innerHTML = `
@@ -321,9 +390,9 @@ function searchBooks(query) {
             }
         })
         .catch(error => {
-            console.error('Error en búsqueda:', error);
-            toggleElement(loadingContainer, false);
-            toggleElement(searchResultsContainer, true, 'block');
+            //console.error('Error en búsqueda:', error);
+            //toggleElement(loadingContainer, false);
+            //toggleElement(searchResultsContainer, true, 'block');
             
             booksContainer.innerHTML = `
                 <div class="error-message">
@@ -331,6 +400,10 @@ function searchBooks(query) {
                     <p>Ha ocurrido un error al buscar. Intente nuevamente.</p>
                 </div>
             `;
+        })
+        .finally(() => {
+            loadingContainer.style.display = 'none';
+            searchResultsContainer.classList.remove('hidden');
         });
 }
 
