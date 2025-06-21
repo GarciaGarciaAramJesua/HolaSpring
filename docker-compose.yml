@@ -10,7 +10,6 @@ services:
       - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
-      - ./src/main/resources/schemas.sql:/docker-entrypoint-initdb.d/schemas.sql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pjohann21"]
       interval: 10s
@@ -34,8 +33,6 @@ services:
       - "35729:35729" # Puerto para LiveReload
     volumes:
       - ./:/app
-      - /app/target # Montar el directorio de destino para evitar recompilaciones innecesarias
-      - maven-repo:/root/.m2
     networks:
       - spring-network
     environment:
@@ -47,7 +44,6 @@ services:
 
 volumes:
   mysql-data:
-  maven-repo:
 
 networks:
   spring-network:

@@ -13,5 +13,8 @@ COPY pom.xml .
 # Descarga dependencias
 RUN mvn dependency:go-offline -B
 
+# Copia el código fuente de la aplicación
+COPY ./ app 
+
 # Punto de entrada usando bash
-CMD ["mvn", "spring-boot:run", "-Dspring-boot.run.jvmArguments=-Dspring.devtools.restart.enabled=true -Dspring.devtools.livereload.enabled=true"]
+CMD ["mvn", "spring-boot:run"]

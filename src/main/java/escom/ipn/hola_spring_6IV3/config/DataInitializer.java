@@ -21,8 +21,8 @@ public class DataInitializer {
                         .orElseThrow(() -> new RuntimeException("Rol ADMIN no encontrado"));
 
                 User user = User.builder()
-                        .username("admin")
-                        .lastname("istrador")
+                        .username("sudo")
+                        .lastname("admin")
                         .firstname("admin")
                         .country("Papua Nueva Guinea")
                         .password(new BCryptPasswordEncoder().encode("password"))

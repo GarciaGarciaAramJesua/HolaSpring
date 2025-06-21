@@ -113,3 +113,33 @@ function redirectIfNotAuthenticated(redirectUrl = '/login') {
         window.location.href = redirectUrl;
     }
 }
+
+function renderBookCardHTML(book, isFav = false) {
+    return `
+        <div class="book-card" data-book-id="${book.id}" onclick="window.location.href='/libro-detalle?id=${book.id}'">
+            <div class="book-cover">
+                <img src="${book.coverUrl}" alt="${book.title}" onerror="this.src='${DEFAULT_COVER}'">
+                <span class="favorite-icon${isFav ? ' active' : ''}" 
+                    title="${isFav ? 'Quitar de favoritos' : 'Agregar a favoritos'}"
+                    onclick="event.stopPropagation(); toggleFavorite('${book.id}', ${isFav}, this)">
+                    <i class="fas fa-star"></i>
+                </span>
+            </div>
+            <div class="book-info">
+                <h3>${book.title}</h3>
+                <p>${book.authors}</p>
+            </div>
+        </div>
+    `;
+}
+
+// books.js o utils.js
+function showNotification(message, duration = 2000) {
+    const notif = document.getElementById('notification');
+    if (!notif) return;
+    notif.textContent = message;
+    notif.classList.add('show');
+    setTimeout(() => {
+        notif.classList.remove('show');
+    }, duration);
+}

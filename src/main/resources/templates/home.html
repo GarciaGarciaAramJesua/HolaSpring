@@ -12,6 +12,7 @@
     <!-- Swiper Carousel -->
     <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css">
 </head>
+<div id="notification" class="notification"></div>
 <body>
     <!-- El header será inyectado aquí -->
     <header id="global-header"></header>
@@ -32,6 +33,11 @@
                 <img src="/images/library.jpg" alt="Biblioteca con estantes llenos de libros" >
             </div>    
         </div>
+        
+        <section id="recommendations-section">
+            <h2>Recomendados para ti</h2>
+            <div id="recommendations-container" class="books-grid"></div>
+        </section>
 
         <div id="loading-container" class="loading-container">
             <div class="loading-spinner-container"></div>
@@ -78,9 +84,17 @@
 
         <div id="search-results" class="search-results hidden">
             <h2>Resultados de búsqueda</h2>
-            <div class="books-container">
+            <div class="search-books-container books-grid">
                 <!-- Los resultados de búsqueda se cargarán dinámicamente -->
             </div>
+        </div>
+
+        <div id="favorites-section" class="favorites-section">
+            <h2>Libros Favoritos</h2>
+            <div id="favorites-books-container" class="books-grid">
+                <!-- Los libros favoritos se cargarán dinámicamente -->
+            </div>
+            <!-- Aquí se insertan muchas .book-card -->
         </div>
     </div>
 
@@ -93,11 +107,18 @@
     <script src="/js/my-profile-script.js"></script>
     <script src="/js/header.js"></script>
     <script src="/js/books.js"></script>
+    <script src="/js/favorites.js"></script>
+    <script src="/js/favorites-update.js"></script>
+    <script src="/js/recommendations.js"></script>
+    <script src="/js/recommendations-engine.js"></script>
+    <script src="/js/favorites-extended.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             redirectIfNotAuthenticated();
             loadGlobalHeader();
             setupHomePage();
+            loadRecommendations();
+            loadFavorites(); // <-- Asegúrate de cargar los favoritos al inicio
         });
     </script>
 </body>

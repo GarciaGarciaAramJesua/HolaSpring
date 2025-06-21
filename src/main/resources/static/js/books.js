@@ -12,7 +12,7 @@ const OPENLIBRARY_API = {
 };
 
 // Imagen de portada por defecto
-const DEFAULT_COVER = '/img/default-cover.jpg';
+const DEFAULT_COVER = '/images/default-cover.jpg';
 
 /**
  * Configura la página principal
@@ -265,6 +265,9 @@ function renderBooks(books, container) {
                         <div class="book-card" onclick="window.location.href='/libro-detalle?id=${book.id}'">
                             <div class="book-cover">
                                 <img src="${book.coverUrl}" alt="${book.title}" onerror="this.src='${DEFAULT_COVER}'">
+                                <span class="favorite-icon" title="Agregar a favoritos" onclick="event.stopPropagation(); toggleFavorite('${book.id}', this.classList.contains('active'))">
+                                    <i class="fas fa-star"></i>
+                                </span>
                             </div>
                             <div class="book-info">
                                 <h3>${book.title}</h3>
@@ -297,6 +300,22 @@ function renderBooks(books, container) {
     });
 }
 
+function renderBooksWithoutSwiper(books, container, favoriteBookIds = []) {
+    // Destruir Swiper previo si existe
+
+    // Limpiar contenedor
+    container.innerHTML = '';
+
+    if (!books.length) {
+        container.innerHTML = '<p class="no-results">No hay libros disponibles.</p>';
+        return;
+    }
+
+    container.innerHTML = books.map(book => {
+        const isFav = favoriteBookIds.includes(book.id);
+        return renderBookCardHTML(book, isFav);
+    }).join('');
+}
 
 /**
  * Configura la funcionalidad de búsqueda
@@ -333,7 +352,7 @@ function setupSearch() {
  */
 function searchBooks(query) {
     const searchResultsContainer = document.getElementById('search-results');
-    const booksContainer = searchResultsContainer.querySelector('.books-container');
+    const booksContainer = searchResultsContainer.querySelector('.search-books-container');
     const categoriesContainer = document.getElementById('categories-container');
     const loadingContainer = document.getElementById('loading-container');
     
@@ -379,7 +398,7 @@ function searchBooks(query) {
                     publishYear: book.first_publish_year || 'Año desconocido'
                 }));*/
                 const books = data.docs.map(formatBookData);
-                renderBooks(books, booksContainer);
+                renderBooksWithoutSwiper(books, booksContainer, data.favorites || []);
             } else {
                 booksContainer.innerHTML = `
                     <div class="no-results">
