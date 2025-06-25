@@ -50,7 +50,8 @@ function toggleFavorite(bookId, isFavorite, iconElement) {
         requestOptions.body = JSON.stringify({
             bookId: bookId,
             bookTitle: bookTitle,
-            bookCoverId: bookCoverId
+            bookCoverId: bookCoverId,
+            bookAuthors: bookCard ? bookCard.dataset.bookAuthors || "Autor desconocido" : "Autor desconocido"
         });
     }
     

@@ -28,18 +28,22 @@ public class Favorite{
     @Column(name = "added_date")
     private java.time.LocalDateTime addedDate;
 
+    @Column(name = "authors")
+    private String authors; // Lista de autores como String, puedes cambiarlo a una lista si lo prefieres
+
     // Constructor por defecto
     public Favorite() {
         this.addedDate = java.time.LocalDateTime.now();
     }
     
     // Constructor con parámetros
-    public Favorite(User user, String bookId, String bookTitle, String bookCoverId) {
+    public Favorite(User user, String bookId, String bookTitle, String bookCoverId, String authors) {
         this.user = user;
         this.bookId = bookId;
         this.bookTitle = bookTitle;
         this.bookCoverId = bookCoverId;
         this.addedDate = java.time.LocalDateTime.now();
+        this.authors = authors;
     }
     
     // Getters y Setters
@@ -89,5 +93,13 @@ public class Favorite{
     
     public void setAddedDate(java.time.LocalDateTime addedDate) {
         this.addedDate = addedDate;
+    }
+
+    public String getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(String authors) {
+        this.authors = authors;
     }
 }

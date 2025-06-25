@@ -9,15 +9,36 @@
  * @returns {Promise} - Promesa con el resultado
  */
 function login(username, password) {
-    return apiPost('/auth/login', { username, password }, false)
-        .then(data => {
-            if (data && data.token) {
-                localStorage.setItem('token', data.token);
-                return data;
-            } else {
-                throw new Error('No se recibió un token válido');
-            }
-        });
+    return fetch('/auth/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: username,
+            password: password
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Credenciales inválidas');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Guardar token
+        saveToken(data.token);
+        
+        // Redireccionar según la URL proporcionada por el backend
+        if (data.redirectUrl) {
+            window.location.href = data.redirectUrl;
+        } else {
+            // Fallback por si no viene URL de redirección
+            window.location.href = '/my-profile';
+        }
+        
+        return data;
+    });
 }
 
 /**
@@ -101,4 +122,21 @@ function setupRegisterForm() {
                 });
         });
     }
+}
+
+function handleLoginResponse(response) {
+  if (response.token) {
+    // Guardar token en localStorage
+    saveToken(response.token);
+    
+    // Redireccionar según la respuesta del servidor
+    if (response.redirectUrl) {
+      window.location.href = response.redirectUrl;
+    } else {
+      // Fallback si no hay URL de redirección
+      window.location.href = '/my-profile';
+    }
+  } else {
+    throw new Error('No se recibió token en la respuesta');
+  }
 }

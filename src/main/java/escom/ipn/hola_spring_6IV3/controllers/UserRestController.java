@@ -50,9 +50,13 @@ public class UserRestController {
     @GetMapping("/admin/all-info")
     public ResponseEntity<?> getAllUsersInfo(@RequestHeader("Authorization") String token) {
         try{
+            System.out.println("Token recibido: " + token);
             List<UserDto> users = userService.getAllUsersDto();
+            System.out.println("Usuarios encontrados: " + users.size());
+            users.forEach(u -> System.out.println("Usuario: " + u.getUsername()));
             return ResponseEntity.ok(users);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor: " + e.getMessage());
         }
     }

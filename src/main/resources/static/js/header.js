@@ -13,14 +13,6 @@ function loadGlobalHeader() {
                     <span>EmmBook</span>
                 </a>
             </div>
-            <div class="header-search">
-                <form id="header-search-form">
-                    <input type="text" id="header-search-input" placeholder="Buscar libros...">
-                    <button type="submit">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </form>
-            </div>
             <nav class="header-nav">
                 <ul>
                     <li><a href="/home" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
@@ -59,20 +51,46 @@ function loadGlobalHeader() {
 /**
  * Verifica si el usuario es admin y muestra el enlace de administración
  */
+// Modifica tu función checkAndShowAdminLink para usar otra lógica
 function checkAndShowAdminLink() {
-    // Obtener información del usuario
-    getUserInfo()
-        .then(data => {
-            const user = data.usuario;
-            const adminNavItem = document.getElementById('admin-nav-item');
-            // Mostrar el enlace si el usuario es admin
-            if (user.role && user.role.name === 'ROLE_ADMIN' && adminNavItem) {
-                adminNavItem.style.display = 'block';
+    // Verifica si hay token
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    
+    // Alternativa: verificar directamente si el usuario es admin usando el token
+    // Esto depende de cómo almacenas la información del rol en tu aplicación
+    try {
+        // Opción 1: Si puedes decodificar el token en el cliente
+        const tokenData = parseJwt(token);
+        const isAdmin = tokenData.role === 'ADMIN' || tokenData.role === 'ROLE_ADMIN';
+        
+        // Opción 2: O simplemente mostrar el enlace admin si estamos en la página de admin
+        const isAdminPage = window.location.pathname.includes('/admin/');
+        
+        if (isAdmin || isAdminPage) {
+            const adminLink = document.getElementById('admin-link');
+            if (adminLink) {
+                adminLink.style.display = 'block';
             }
-        })
-        .catch(error => {
-            console.error('Error al verificar rol de usuario:', error);
-        });
+        }
+    } catch (e) {
+        console.error('Error verificando permisos de admin:', e);
+    }
+}
+
+// Función auxiliar para decodificar JWT
+function parseJwt(token) {
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+    } catch (e) {
+        console.error('Error parsing JWT', e);
+        return {};
+    }
 }
 
 /**

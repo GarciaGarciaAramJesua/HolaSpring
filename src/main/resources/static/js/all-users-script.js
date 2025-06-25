@@ -2,6 +2,18 @@
  * Funciones para administración de usuarios
  */
 
+function handleLogin(response) {
+    // Guardar el token
+    saveToken(response.token);
+    
+    // Redireccionar según la respuesta del servidor
+    if (response.redirectUrl) {
+        window.location.href = response.redirectUrl;
+    } else {
+        window.location.href = '/my-profile'; // Fallback
+    }
+}
+
 /**
  * Obtener lista de todos los usuarios
  * @returns {Promise} - Promesa con la lista de usuarios
@@ -277,9 +289,28 @@ function setupAdminPage() {
   // Redireccionar si no está autenticado
   redirectIfNotAuthenticated();
   
+  console.log('Comenzando carga de usuarios...');
+  
+  // Verificar token
+  const token = getToken();
+  console.log('Token disponible:', !!token); // No mostrar el token completo por seguridad
+  
   // Cargar lista de usuarios
   getAllUsers()
       .then(users => {
+          console.log('Usuarios recibidos:', users);
+          
+          if (!users || users.length === 0) {
+              console.log('No se recibieron usuarios o la lista está vacía');
+              // Añadir mensaje a la tabla
+              const usersTable = document.getElementById('users-table');
+              const row = usersTable.insertRow();
+              const cell = row.insertCell(0);
+              cell.colSpan = 7;
+              cell.textContent = 'No hay usuarios disponibles';
+              return;
+          }
+          
           const usersTable = document.getElementById('users-table');
           users.forEach(user => {
               const row = usersTable.insertRow();
@@ -289,40 +320,51 @@ function setupAdminPage() {
               row.insertCell(3).textContent = user.country;
               row.insertCell(4).textContent = user.role;
               
-              const passwordCell = row.insertCell(5);
-              passwordCell.innerHTML = `
-                  <div class="password-container">
-                      <span>********</span>
-                      <i class="fas fa-eye" onclick="togglePasswordVisibility(this)"></i>
-                  </div>
-              `;
-              
-              const actionCell = row.insertCell(6);
-              actionCell.innerHTML = `
-                  <div class="action-buttons">
-                      <button onclick="editUser(this)">Editar</button>
-                      <button onclick="deleteUser('${user.username}')">Eliminar</button>
-                  </div>
-              `;
+              // Resto del código...
           });
       })
       .catch(error => {
-          console.error('Error:', error);
+          console.error('Error detallado:', error);
+          // Mostrar error en la UI para depuración
+          const errorDiv = document.createElement('div');
+          errorDiv.style.color = 'red';
+          errorDiv.style.padding = '20px';
+          errorDiv.textContent = `Error: ${error.message || error}`;
+          document.body.appendChild(errorDiv);
+          
           showToast('Error al cargar los usuarios', 'error');
-          setTimeout(() => window.location.href = '/my-profile', 2000);
       });
-      
-  // Cerrar modal al hacer clic fuera del contenido
-  window.onclick = function(event) {
-      const modal = document.getElementById('addUserModal');
-      if (event.target == modal) {
-          closeAddUserModal();
-      }
-  };
-  
-  // Configurar formulario de registro
-  const addUserForm = document.getElementById('addUserForm');
-  if (addUserForm) {
-      addUserForm.onsubmit = registerUserFromAdmin;
+}
+
+// Mejorar la función de API
+function apiGet(url) {
+  const token = getToken();
+  if (!token) {
+    console.error('No hay token disponible');
+    return Promise.reject('No hay token de autenticación');
   }
+
+  console.log('Haciendo solicitud a:', url);
+  
+  return fetch(url, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => {
+    console.log('Respuesta recibida:', response.status);
+    if (!response.ok) {
+      return response.text().then(text => {
+        console.error('Error en la respuesta:', text);
+        throw new Error(`Error ${response.status}: ${text}`);
+      });
+    }
+    return response.json();
+  })
+  .catch(error => {
+    console.error('Error en apiGet:', error);
+    throw error;
+  });
 }

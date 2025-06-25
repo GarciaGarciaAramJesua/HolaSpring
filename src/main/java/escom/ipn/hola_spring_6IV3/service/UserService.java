@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import escom.ipn.hola_spring_6IV3.dtos.UserDto;
 import escom.ipn.hola_spring_6IV3.model.Role;
 import escom.ipn.hola_spring_6IV3.model.User;
-import escom.ipn.hola_spring_6IV3.repository.RoleRepository;
 import escom.ipn.hola_spring_6IV3.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
@@ -65,8 +63,7 @@ public class UserService {
 
         // Si hay un rol en la solicitud, actualizarlo
         if (updatedUserDto.getRole() != null && !updatedUserDto.getRole().isEmpty()) {
-            Role role = roleRepository.findByName("ROLE_" + updatedUserDto.getRole().toUpperCase())
-                    .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+            Role role = Role.fromString(updatedUserDto.getRole().toUpperCase());
             user.setRole(role);
         }
 

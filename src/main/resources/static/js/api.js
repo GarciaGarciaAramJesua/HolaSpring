@@ -69,10 +69,37 @@ async function fetchWithConfig(url, options = {}, includeToken = true) {
  * @param {boolean} includeToken - Si se debe incluir el token
  * @returns {Promise} - Promesa con la respuesta
  */
-function apiGet(url, includeToken = true) {
-    return fetchWithConfig(url, {
-        method: 'GET'
-    }, includeToken);
+function apiGet(url) {
+  // Obtener el token almacenado (esta función debe existir en tu código)
+  const token = getToken();
+  
+  if (!token) {
+    console.error('No hay token disponible');
+    return Promise.reject('No hay token de autenticación');
+  }
+
+  return fetch(url, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Error en la solicitud: ' + response.status);
+    }
+    return response.json();
+  })
+  .catch(error => {
+    console.error('Error en apiGet:', error);
+    throw error;
+  });
+}
+
+// Asegúrate de tener también esta función para recuperar el token
+function getToken() {
+  return localStorage.getItem('token'); // O donde sea que lo almacenes
 }
 
 /**

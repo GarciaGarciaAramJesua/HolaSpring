@@ -72,11 +72,7 @@ function setupProfilePage() {
           profileCard.classList.add('fade-in');
 
           // Mostrar u ocultar botón de administración
-          toggleElement(
-              document.getElementById('admin-page'),
-              user.role.name === 'ROLE_ADMIN',
-              'flex'
-          );
+          setupAdminButton(user);
       })
       .catch(error => {
           console.error('Error:', error);
@@ -214,4 +210,44 @@ function setupProfilePage() {
           window.location.href = '/admin/all-users';
       });
   }
+}
+
+function setupAdminButton(user) {
+    const adminButton = document.getElementById('admin-page');
+    
+    if (!adminButton) {
+        console.error('[setupAdminButton] El botón de administrador no existe en el DOM');
+        return;
+    }
+    
+    console.log('[setupAdminButton] Datos del usuario:', user);
+    console.log('[setupAdminButton] Rol del usuario:', user.role);
+    
+    const isAdmin = user.role === 'ROLE_ADMIN';
+    console.log('[setupAdminButton] ¿Es admin?', isAdmin);
+    
+    // Primera aproximación - usando toggleElement
+    toggleElement(adminButton, isAdmin, 'flex');
+    
+    // Segunda aproximación - aplicación directa del estilo (como respaldo)
+    setTimeout(() => {
+        // Verificar si el botón está visible después de usar toggleElement
+        const isVisible = window.getComputedStyle(adminButton).display !== 'none';
+        
+        if (isAdmin && !isVisible) {
+            console.warn('[setupAdminButton] El botón debería estar visible pero no lo está. Forzando visibilidad.');
+            adminButton.style.display = 'flex';
+            
+            // Asegurarse de que ninguna otra propiedad CSS está interfiriendo
+            adminButton.style.visibility = 'visible';
+            adminButton.style.opacity = '1';
+            adminButton.style.height = 'auto';
+            adminButton.style.overflow = 'visible';
+        }
+    }, 200);
+    
+    // Asegurarse de que el evento click está configurado
+    adminButton.addEventListener('click', () => {
+        window.location.href = '/admin/all-users';
+    });
 }

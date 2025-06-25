@@ -8,17 +8,19 @@ public class FavoriteBookDetailsDto {
     private String bookTitle;
     private String bookCoverId;
     private LocalDateTime addedDate;
+    private String authors;
     
     // Constructor por defecto
     public FavoriteBookDetailsDto() {}
     
     // Constructor con parámetros
-    public FavoriteBookDetailsDto(Long id, String bookId, String bookTitle, String bookCoverId, LocalDateTime addedDate) {
+    public FavoriteBookDetailsDto(Long id, String bookId, String bookTitle, String bookCoverId, LocalDateTime addedDate, String authors) {
         this.id = id;
         this.bookId = bookId;
         this.bookTitle = bookTitle;
         this.bookCoverId = bookCoverId;
         this.addedDate = addedDate;
+        this.authors = authors;
     }
     
     // Getters y Setters
@@ -60,5 +62,13 @@ public class FavoriteBookDetailsDto {
     
     public void setAddedDate(LocalDateTime addedDate) {
         this.addedDate = addedDate;
+    }
+
+    public String getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(String authors) {
+        this.authors = authors;
     }
 }

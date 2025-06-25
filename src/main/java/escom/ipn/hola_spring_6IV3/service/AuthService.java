@@ -11,7 +11,6 @@ import escom.ipn.hola_spring_6IV3.dtos.LoginRequest;
 import escom.ipn.hola_spring_6IV3.dtos.RegisterRequest;
 import escom.ipn.hola_spring_6IV3.model.Role;
 import escom.ipn.hola_spring_6IV3.model.User;
-import escom.ipn.hola_spring_6IV3.repository.RoleRepository;
 import escom.ipn.hola_spring_6IV3.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,6 @@ public class AuthService {
 
     private final JwtService jwtService;
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
@@ -33,8 +31,7 @@ public class AuthService {
         }
 
         // Obtener el rol correspondiente
-        Role role = roleRepository.findByName("ROLE_" + request.getRole().toUpperCase())
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+        Role role = Role.fromString(request.getRole());
 
         // Crear el nuevo usuario
         User user = User.builder()
@@ -61,9 +58,21 @@ public class AuthService {
     public JwtResponse loginUser(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        UserDetails user = userRepository.findByUsername(request.getUsername())
+        
+        // Obtener el usuario completo para verificar su rol
+        User user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        
         String token = jwtService.getToken(user);
-        return new JwtResponse(token);
+        
+        // Determinar URL de redirección según el rol
+        String redirectUrl = "ROLE_ADMIN".equals(user.getRole().getName()) 
+            ? "/admin/all-users" 
+            : "/my-profile";
+        
+        return JwtResponse.builder()
+            .token(token)
+            .redirectUrl(redirectUrl)
+            .build();
     }
 }

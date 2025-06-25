@@ -48,7 +48,7 @@ public class FavoriteService {
         }
         
         // Crear nuevo favorito
-        Favorite favorite = new Favorite(user, request.getBookId(), request.getBookTitle(), request.getBookCoverId());
+        Favorite favorite = new Favorite(user, request.getBookId(), request.getBookTitle(), request.getBookCoverId(), request.getAuthors());
         Favorite savedFavorite = favoriteRepository.save(favorite);
         
         return convertToDTO(savedFavorite);
@@ -111,7 +111,8 @@ public class FavoriteService {
             favorite.getBookId(),
             favorite.getBookTitle(),
             favorite.getBookCoverId(),
-            favorite.getAddedDate()
+            favorite.getAddedDate(),
+            favorite.getAuthors()
         );
     }
 }

@@ -71,9 +71,34 @@ function validatePassword(password) {
  * @param {string} displayType - Tipo de display a usar
  */
 function toggleElement(element, show, displayType = 'block') {
-    if (element) {
-        element.style.display = show ? displayType : 'none';
+    // Añadir logs para depuración
+    console.log(`[toggleElement] Elemento:`, element);
+    console.log(`[toggleElement] Mostrar:`, show);
+    console.log(`[toggleElement] Tipo de display:`, displayType);
+    
+    if (!element) {
+        console.error('[toggleElement] El elemento no existe');
+        return;
     }
+    
+    // Registrar el estado anterior para comparar
+    const prevDisplay = element.style.display;
+    
+    // Aplicar el nuevo estilo
+    element.style.display = show ? displayType : 'none';
+    
+    console.log(`[toggleElement] Cambiado de "${prevDisplay}" a "${element.style.display}"`);
+    
+    // Verificación extra para asegurarnos que se aplicó el cambio
+    setTimeout(() => {
+        const computedStyle = window.getComputedStyle(element).display;
+        console.log(`[toggleElement] Display computado después del cambio: "${computedStyle}"`);
+        
+        // Si el estilo computado no coincide con lo esperado, podría haber CSS sobrescribiendo
+        if ((show && computedStyle === 'none') || (!show && computedStyle !== 'none')) {
+            console.warn('[toggleElement] ¡Advertencia! El estilo computado no coincide con lo esperado. Podría haber CSS sobrescribiendo este estilo.');
+        }
+    }, 100);
 }
 
 /**
